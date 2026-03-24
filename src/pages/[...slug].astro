@@ -1,53 +1,145 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { render } from 'astro:content';
-import { components } from '@mintlify/astro/components';
-import { resolvePageData } from '@mintlify/astro/helpers';
-import docsConfig from '../../docs/docs.json';
+import AppShell from '../components/AppShell.astro';
+
+const pages = [
+  { slug: 'categories/ai-llms', title: 'AI & Large Language Models', description: 'Discover the next generation of artificial intelligence.' , kind: 'category' },
+  { slug: 'categories/productivity', title: 'Productivity', description: 'Notes, tasks, and focus tools that help teams work faster.', kind: 'category' },
+  { slug: 'categories/design-creative', title: 'Design & Creative', description: 'Interfaces, branding, illustration, and image generation.', kind: 'category' },
+  { slug: 'categories/engineering-development', title: 'Engineering & Development', description: 'Modern tools for builders shipping products at speed.', kind: 'category' },
+  { slug: 'categories/automation-workflows', title: 'Automation & Workflows', description: 'No-code tools to connect apps and eliminate repetitive work.', kind: 'category' },
+  { slug: 'categories/marketing-sales', title: 'Marketing & Sales', description: 'SEO, email, CRM, and growth tools for modern teams.', kind: 'category' },
+  { slug: 'categories/customer-support-ops', title: 'Customer Support & Operations', description: 'Helpdesk and ops tools to scale customer experience.', kind: 'category' },
+  { slug: 'collections/best-ai-tools-for-marketers', title: 'Best AI Tools for Marketers', description: 'Expert-vetted AI tools for content, analytics, and automation.', kind: 'collection' },
+  { slug: 'collections/best-note-taking-apps', title: 'Best Note-Taking Apps', description: 'The best apps for organizing, retrieving, and thinking clearly.', kind: 'collection' },
+  { slug: 'collections/best-ai-video-tools', title: 'Best AI Video Tools', description: 'Generate, edit, and repurpose video content with AI.', kind: 'collection' },
+  { slug: 'compare/claude-vs-chatgpt', title: 'Claude vs ChatGPT', description: 'A deep comparison of the two leading AI assistants.', kind: 'compare' },
+  { slug: 'compare/notion-vs-obsidian', title: 'Notion vs Obsidian', description: 'Collaborative workspace versus personal knowledge base.', kind: 'compare' },
+  { slug: 'tools/chatgpt', title: 'ChatGPT', description: 'The world’s most-used AI assistant.', kind: 'tool' },
+  { slug: 'tools/claude', title: 'Claude 3.5 Sonnet', description: 'A model known for reasoning, writing, and nuanced assistance.', kind: 'tool' },
+  { slug: 'tools/notion', title: 'Notion', description: 'All-in-one workspace for notes, docs, and databases.', kind: 'tool' },
+  { slug: 'tools/figma', title: 'Figma', description: 'Collaborative interface design for modern teams.', kind: 'tool' },
+  { slug: 'tools/zapier', title: 'Zapier', description: 'Automation platform connecting thousands of apps.', kind: 'tool' },
+];
 
 export async function getStaticPaths() {
-  const docsPages = import.meta.glob('../../.mintlify/docs/**/*.mdx');
-  return Object.keys(docsPages)
-    .map((path) => path.replace('../../.mintlify/docs/', '').replace(/\.mdx$/, '').replace(/\/index$/, ''))
-    .filter((slug) => slug !== 'index')
-    .map((slug) => ({ params: { slug } }));
+  const pages = [
+    { slug: 'categories/ai-llms', title: 'AI & Large Language Models', description: 'Discover the next generation of artificial intelligence.', kind: 'category' },
+    { slug: 'categories/productivity', title: 'Productivity', description: 'Notes, tasks, and focus tools that help teams work faster.', kind: 'category' },
+    { slug: 'categories/design-creative', title: 'Design & Creative', description: 'Interfaces, branding, illustration, and image generation.', kind: 'category' },
+    { slug: 'categories/engineering-development', title: 'Engineering & Development', description: 'Modern tools for builders shipping products at speed.', kind: 'category' },
+    { slug: 'categories/automation-workflows', title: 'Automation & Workflows', description: 'No-code tools to connect apps and eliminate repetitive work.', kind: 'category' },
+    { slug: 'categories/marketing-sales', title: 'Marketing & Sales', description: 'SEO, email, CRM, and growth tools for modern teams.', kind: 'category' },
+    { slug: 'categories/customer-support-ops', title: 'Customer Support & Operations', description: 'Helpdesk and ops tools to scale customer experience.', kind: 'category' },
+    { slug: 'collections/best-ai-tools-for-marketers', title: 'Best AI Tools for Marketers', description: 'Expert-vetted AI tools for content, analytics, and automation.', kind: 'collection' },
+    { slug: 'collections/best-note-taking-apps', title: 'Best Note-Taking Apps', description: 'The best apps for organizing, retrieving, and thinking clearly.', kind: 'collection' },
+    { slug: 'collections/best-ai-video-tools', title: 'Best AI Video Tools', description: 'Generate, edit, and repurpose video content with AI.', kind: 'collection' },
+    { slug: 'compare/claude-vs-chatgpt', title: 'Claude vs ChatGPT', description: 'A deep comparison of the two leading AI assistants.', kind: 'compare' },
+    { slug: 'compare/notion-vs-obsidian', title: 'Notion vs Obsidian', description: 'Collaborative workspace versus personal knowledge base.', kind: 'compare' },
+    { slug: 'tools/chatgpt', title: 'ChatGPT', description: 'The world’s most-used AI assistant.', kind: 'tool' },
+    { slug: 'tools/claude', title: 'Claude 3.5 Sonnet', description: 'A model known for reasoning, writing, and nuanced assistance.', kind: 'tool' },
+    { slug: 'tools/notion', title: 'Notion', description: 'All-in-one workspace for notes, docs, and databases.', kind: 'tool' },
+    { slug: 'tools/figma', title: 'Figma', description: 'Collaborative interface design for modern teams.', kind: 'tool' },
+    { slug: 'tools/zapier', title: 'Zapier', description: 'Automation platform connecting thousands of apps.', kind: 'tool' },
+  ];
+  return pages.map((page) => ({ params: { slug: page.slug } }));
 }
 
-const docsPages = import.meta.glob('../../.mintlify/docs/**/*.mdx');
-const slugParts = Array.isArray(Astro.params.slug)
-  ? Astro.params.slug
-  : Astro.params.slug
-    ? [Astro.params.slug]
-    : [];
-const slug = slugParts.join('/');
-const currentPath = slug ? `/${slug}` : '/';
-const matchedPath = `../../.mintlify/docs/${slug || 'index'}.mdx`;
-const entryModule = docsPages[matchedPath];
-const entry = entryModule ? await entryModule() : null;
-const titleMap = Object.fromEntries(
-  Object.entries(docsPages).map(([path, loader]) => {
-    const slugPath = path
-      .replace('../../.mintlify/docs/', '')
-      .replace(/\/index\.mdx$/, '')
-      .replace(/\.mdx$/, '');
-
-    return [slugPath || 'index', loader.name ?? ''];
-  }),
-);
-const pageData = resolvePageData(docsConfig, { currentPath, titleMap });
-const pageTitle = slug ? slug.split('/').pop()?.replaceAll('-', ' ') ?? 'Expandus' : 'Expandus';
+const slug = Astro.params.slug ?? '';
+const page = pages.find((item) => item.slug === slug) ?? pages[0];
+const kindLabel = {
+  category: 'Evolving Technology',
+  collection: 'Curated Collection',
+  compare: 'Deep Dive Comparison',
+  tool: 'Top Rated Artifact',
+}[page.kind];
 ---
 
-<Layout title={pageTitle} description="Expandus documentation">
-  <main style="max-width: 980px; margin: 0 auto; padding: 40px 20px; font-family: system-ui, sans-serif;">
-    <header style="margin-bottom: 32px;">
-      <p style="text-transform: uppercase; letter-spacing: 0.08em; color: #7c3aed; margin: 0 0 8px;">
-        {pageData.groupName ?? 'Documentation'}
-      </p>
-      <h1 style="margin: 0 0 8px; font-size: 2.5rem;">{pageTitle}</h1>
-      <p style="margin: 0; color: #4b5563;">{pageData.groupName ? `Section: ${pageData.groupName}` : 'Browse the curated AI and SaaS library.'}</p>
-    </header>
+<AppShell title={`DigitalCurator · ${page.title}`} description={page.description}>
+  <main class={`page page-${page.kind}`}>
+    <section class="detail-hero">
+      <span class="eyebrow">{kindLabel}</span>
+      <h1>{page.title}</h1>
+      <p>{page.description}</p>
+      <div class="detail-actions">
+        <a class="button" href="#">Try Now</a>
+        <a class="ghost-button" href="#">View Details</a>
+      </div>
+    </section>
 
-    {entry ? <entry.Content components={components} /> : <p>Page not found.</p>}
+    {page.kind === 'compare' ? (
+      <section class="compare-shell">
+        <div class="compare-row header">
+          <div>Feature Matrix</div>
+          <div>Option A</div>
+          <div>Option B</div>
+        </div>
+        <div class="compare-row">
+          <div>Primary use</div>
+          <div>Team collaboration</div>
+          <div>Personal workflows</div>
+        </div>
+        <div class="compare-row">
+          <div>Customization</div>
+          <div>Visual blocks</div>
+          <div>Markdown + plugins</div>
+        </div>
+        <div class="compare-row">
+          <div>Best for</div>
+          <div>Shared workspaces</div>
+          <div>Private knowledge systems</div>
+        </div>
+      </section>
+    ) : page.kind === 'tool' ? (
+      <section class="feature-grid">
+        <div class="artifact-grid">
+          <article class="artifact large">
+            <img src="/images/hero-dark.png" alt={page.title} />
+            <div>
+              <span class="badge">Editor’s choice</span>
+              <h3>{page.title}</h3>
+              <p>{page.description}</p>
+            </div>
+          </article>
+          <article class="artifact">
+            <span class="badge">Key benefit</span>
+            <h3>High signal, low friction</h3>
+            <p>Everything you need to evaluate the tool at a glance.</p>
+          </article>
+          <article class="artifact">
+            <span class="badge">Best for</span>
+            <h3>Modern teams</h3>
+            <p>Built to fit the workflows of founders, creators, and operators.</p>
+          </article>
+        </div>
+      </section>
+    ) : (
+      <section class="feature-grid">
+        <div class="artifact-grid">
+          <article class="artifact large">
+            <img src="/images/hero-light.png" alt={page.title} />
+            <div>
+              <span class="badge">{page.kind === 'collection' ? 'Top picks' : 'Browse tools'}</span>
+              <h3>{page.title}</h3>
+              <p>{page.description}</p>
+            </div>
+          </article>
+          <article class="artifact">
+            <span class="badge">Featured</span>
+            <h3>Claude 3.5 Sonnet</h3>
+            <p>Advanced reasoning, writing, and code generation.</p>
+          </article>
+          <article class="artifact">
+            <span class="badge">Featured</span>
+            <h3>Notion</h3>
+            <p>Workspace for notes, docs, and team systems.</p>
+          </article>
+          <article class="artifact">
+            <span class="badge">Featured</span>
+            <h3>Perplexity</h3>
+            <p>Search with cited answers and web browsing.</p>
+          </article>
+        </div>
+      </section>
+    )}
   </main>
-</Layout>
+</AppShell>

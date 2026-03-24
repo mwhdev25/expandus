@@ -1,3 +1,25 @@
-<header>
-  <a href="/">Expandus</a>
+---
+import { topNav } from '../lib/site';
+
+const navLinks = {
+  Categories: '/categories/ai-llms',
+  Collections: '/collections/best-ai-tools-for-marketers',
+  Compare: '/compare/claude-vs-chatgpt',
+  New: '/#featured',
+  Featured: '/#featured',
+};
+---
+
+<header class="topbar">
+  <div class="brand"><a href="/">DigitalCurator</a></div>
+  <nav class="topnav" aria-label="Primary">
+    {topNav.map((item) => <a href={navLinks[item] ?? '/'}>{item}</a>)}
+  </nav>
+  <div class="searchwrap">
+    <input aria-label="Search tools" type="search" placeholder="Search tools..." />
+  </div>
+  <div class="actions">
+    <a class="ghost" href="#">Sign In</a>
+    <a class="button" href="#">Submit Tool</a>
+  </div>
 </header>

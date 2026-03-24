@@ -1,21 +1,85 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { render } from 'astro:content';
-import { components } from '@mintlify/astro/components';
-import { resolvePageData } from '@mintlify/astro/helpers';
-import docsConfig from '../../docs/docs.json';
-
-const docsPages = import.meta.glob('../../.mintlify/docs/**/*.mdx');
-const entryModule = docsPages['../../.mintlify/docs/index.mdx'];
-const entry = entryModule ? await entryModule() : null;
-const pageData = resolvePageData(docsConfig, { currentPath: '/', titleMap: { index: 'Home' } });
+import AppShell from '../components/AppShell.astro';
+import { featuredArtifacts, categories, heroBanners } from '../lib/site';
 ---
 
-<Layout title="Expandus" description="Curated AI and SaaS tools">
-  <main style="max-width: 980px; margin: 0 auto; padding: 40px 20px; font-family: system-ui, sans-serif;">
-    <p style="text-transform: uppercase; letter-spacing: 0.08em; color: #7c3aed; margin: 0 0 8px;">
-      {pageData.groupName ?? 'Discover'}
-    </p>
-    {entry ? <entry.Content components={components} /> : <p>Home page not found.</p>}
+<AppShell title="DigitalCurator" description="A curated gallery for AI and SaaS artifacts">
+  <main class="page">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Curated for builders</span>
+        <h1>The definitive gallery for <em>AI &amp; SaaS</em> artifacts.</h1>
+        <p>Stop hunting through spreadsheets. Discover a hand-picked collection of premium tools designed to elevate your workflow.</p>
+        <div class="hero-search">
+          <input type="search" placeholder="What are you building today?" />
+          <a class="button" href="/categories/ai-llms">Explore All</a>
+        </div>
+      </div>
+      <div class="hero-grid">
+        {featuredArtifacts.slice(1, 5).map((item) => (
+          <a class="mini-card" href={item.href}>
+            <span class="mini-icon" />
+            <strong>{item.title}</strong>
+            <p>{item.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="strip">
+      <div class="section-head">
+        <div>
+          <h2>Browse by intent</h2>
+          <p>Selected ecosystems for every stage of your build.</p>
+        </div>
+        <a href="/categories/ai-llms">View all categories →</a>
+      </div>
+      <div class="category-row">
+        {categories.map((category) => (
+          <a class="category-pill" href={category.href}>
+            <span>{category.icon}</span>
+            <strong>{category.title}</strong>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="feature-grid">
+      <div class="section-head">
+        <div>
+          <h2>Featured Artifacts</h2>
+          <p>The tools defining the next decade of digital creation.</p>
+        </div>
+      </div>
+      <div class="artifact-grid">
+        <a class="artifact large" href={featuredArtifacts[0].href}>
+          <img src={featuredArtifacts[0].image} alt={featuredArtifacts[0].title} />
+          <div>
+            <span class="badge">{featuredArtifacts[0].tag}</span>
+            <h3>{featuredArtifacts[0].title}</h3>
+            <p>{featuredArtifacts[0].description}</p>
+          </div>
+        </a>
+        {featuredArtifacts.slice(1).map((item) => (
+          <a class="artifact" href={item.href}>
+            <span class="badge">{item.tag}</span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+            <span class="meta">{item.kicker}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="cta-panel">
+      <div>
+        <h2>{heroBanners[0].title}</h2>
+        <p>{heroBanners[0].description}</p>
+      </div>
+      <form class="cta-form">
+        <input type="email" placeholder="curator@example.com" />
+        <button type="button">Subscribe</button>
+      </form>
+    </section>
   </main>
-</Layout>
+</AppShell>
