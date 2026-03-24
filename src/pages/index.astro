@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { render } from 'astro:content';
+import { components } from '@mintlify/astro/components';
+import { resolvePageData } from '@mintlify/astro/helpers';
+import docsConfig from '../../docs/docs.json';
+
+const docsPages = import.meta.glob('../../.mintlify/docs/**/*.mdx');
+const entryModule = docsPages['../../.mintlify/docs/index.mdx'];
+const entry = entryModule ? await entryModule() : null;
+const pageData = resolvePageData(docsConfig, { currentPath: '/', titleMap: { index: 'Home' } });
+---
+
+<Layout title="Expandus" description="Curated AI and SaaS tools">
+  <main style="max-width: 980px; margin: 0 auto; padding: 40px 20px; font-family: system-ui, sans-serif;">
+    <p style="text-transform: uppercase; letter-spacing: 0.08em; color: #7c3aed; margin: 0 0 8px;">
+      {pageData.groupName ?? 'Discover'}
+    </p>
+    {entry ? <entry.Content components={components} /> : <p>Home page not found.</p>}
+  </main>
+</Layout>

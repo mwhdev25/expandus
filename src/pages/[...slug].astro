@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { render } from 'astro:content';
+import { components } from '@mintlify/astro/components';
+import { resolvePageData } from '@mintlify/astro/helpers';
+import docsConfig from '../../docs/docs.json';
+
+export async function getStaticPaths() {
+  const docsPages = import.meta.glob('../../.mintlify/docs/**/*.mdx');
+  return Object.keys(docsPages)
+    .map((path) => path.replace('../../.mintlify/docs/', '').replace(/\.mdx$/, '').replace(/\/index$/, ''))
+    .filter((slug) => slug !== 'index')
+    .map((slug) => ({ params: { slug } }));
+}
+
+const docsPages = import.meta.glob('../../.mintlify/docs/**/*.mdx');
+const slugParts = Array.isArray(Astro.params.slug)
+  ? Astro.params.slug
+  : Astro.params.slug
+    ? [Astro.params.slug]
+    : [];
+const slug = slugParts.join('/');
+const currentPath = slug ? `/${slug}` : '/';
+const matchedPath = `../../.mintlify/docs/${slug || 'index'}.mdx`;
+const entryModule = docsPages[matchedPath];
+const entry = entryModule ? await entryModule() : null;
+const titleMap = Object.fromEntries(
+  Object.entries(docsPages).map(([path, loader]) => {
+    const slugPath = path
+      .replace('../../.mintlify/docs/', '')
+      .replace(/\/index\.mdx$/, '')
+      .replace(/\.mdx$/, '');
+
+    return [slugPath || 'index', loader.name ?? ''];
+  }),
+);
+const pageData = resolvePageData(docsConfig, { currentPath, titleMap });
+const pageTitle = slug ? slug.split('/').pop()?.replaceAll('-', ' ') ?? 'Expandus' : 'Expandus';
+---
+
+<Layout title={pageTitle} description="Expandus documentation">
+  <main style="max-width: 980px; margin: 0 auto; padding: 40px 20px; font-family: system-ui, sans-serif;">
+    <header style="margin-bottom: 32px;">
+      <p style="text-transform: uppercase; letter-spacing: 0.08em; color: #7c3aed; margin: 0 0 8px;">
+        {pageData.groupName ?? 'Documentation'}
+      </p>
+      <h1 style="margin: 0 0 8px; font-size: 2.5rem;">{pageTitle}</h1>
+      <p style="margin: 0; color: #4b5563;">{pageData.groupName ? `Section: ${pageData.groupName}` : 'Browse the curated AI and SaaS library.'}</p>
+    </header>
+
+    {entry ? <entry.Content components={components} /> : <p>Page not found.</p>}
+  </main>
+</Layout>
