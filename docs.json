@@ -1,55 +1,72 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "willow",
-  "name": "Expandus Help",
+  "name": "Expandus",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#7C3AED",
+    "light": "#A78BFA",
+    "dark": "#5B21B6"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Discover",
         "groups": [
           {
-            "group": "Get Started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
+            "group": "Home",
+            "pages": ["index"]
           },
           {
-            "group": "Essentials",
+            "group": "Featured Tools",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              "tools/chatgpt",
+              "tools/claude",
+              "tools/notion",
+              "tools/figma",
+              "tools/zapier"
             ]
           }
         ]
       },
       {
-        "tab": "API Reference",
+        "tab": "Categories",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "Browse by Category",
             "pages": [
-              "api-reference/introduction"
+              "categories/ai-llms",
+              "categories/productivity",
+              "categories/design-creative",
+              "categories/engineering-development",
+              "categories/automation-workflows",
+              "categories/marketing-sales",
+              "categories/customer-support-ops"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "Collections",
+        "groups": [
           {
-            "group": "Endpoint Examples",
+            "group": "Curated Lists",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "collections/best-ai-tools-for-marketers",
+              "collections/best-note-taking-apps",
+              "collections/best-ai-video-tools"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Compare",
+        "groups": [
+          {
+            "group": "Head-to-Head",
+            "pages": [
+              "compare/claude-vs-chatgpt",
+              "compare/notion-vs-obsidian"
             ]
           }
         ]
@@ -58,19 +75,19 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "All Categories",
+          "href": "https://expandus.io/categories/ai-llms",
+          "icon": "grid-2"
         },
         {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "anchor": "Collections",
+          "href": "https://expandus.io/collections/best-ai-tools-for-marketers",
+          "icon": "bookmark"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Compare Tools",
+          "href": "https://expandus.io/compare/claude-vs-chatgpt",
+          "icon": "code-compare"
         }
       ]
     }
@@ -82,21 +99,20 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Submit a Tool",
+        "href": "mailto:hello@expandus.io"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Browse Tools",
+      "href": "https://expandus.io/categories/ai-llms"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/expandus",
+      "github": "https://github.com/expandus"
     }
   }
 }
